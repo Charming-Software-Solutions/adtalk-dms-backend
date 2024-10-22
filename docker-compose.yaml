@@ -1,0 +1,47 @@
+name: adtalk-mockup-server
+services:
+  dev:
+    build: .
+    container_name: adtalk-mockup-dev
+    command: sh -c "python manage.py makemigrations --no-input &&
+      python manage.py migrate --no-input --settings=adtalk_backend_mockup.settings && python manage.py runserver 0.0.0.0:8000 && wait"
+    environment:
+      DJANGO_SETTINGS_MODULE: adtalk_backend_mockup.settings
+      AWS_QUERYSTRING_EXPIRE: ${AWS_QUERYSTRING_EXPIRE}
+      AWS_S3_REGION_NAME: ${AWS_S3_REGION_NAME}
+      AWS_S3_SIGNATURE_VERSION: ${AWS_S3_SIGNATURE_VERSION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME}
+      DEFAULT_FILE_STORAGE: ${DEFAULT_FILE_STORAGE}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: adtalk_mockup_db
+      DB_PORT: ${DB_PORT}
+      STATIC_URL: static/
+      STATIC_ROOT: os.path.join(BASE_DIR, 'staticfiles')
+      MEDIA_URL: /media/
+      MEDIA_ROOT: os.path.join(BASE_DIR, 'static/images')
+      SECRET_KEY: ${SECRET_KEY}
+      DEBUG: ${DEBUG}
+    depends_on:
+      - adtalk_mockup_db
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/adtalk-backend
+    working_dir: /adtalk-backend
+  adtalk_mockup_db:
+    image: postgres:latest
+    volumes:
+      - adtalk-backend:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    container_name: adtalk-mockup-db
+    ports:
+      - "5432:5432"
+volumes:
+  adtalk-backend:
