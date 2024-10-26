@@ -1,0 +1,55 @@
+name: adtalk-mockup-server-prod
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: adtalk-mockup-dev-prod
+    command: sh -c "python manage.py makemigrations --no-input &&
+      python manage.py migrate --no-input --settings=adtalk_backend_mockup.settings &&
+      gunicorn adtalk_backend_mockup.wsgi:application --bind 0.0.0.0:${APP_PORT} --workers 3"
+    environment:
+      DJANGO_SETTINGS_MODULE: adtalk_backend_mockup.settings
+      AWS_QUERYSTRING_EXPIRE: ${AWS_QUERYSTRING_EXPIRE}
+      AWS_S3_REGION_NAME: ${AWS_S3_REGION_NAME}
+      AWS_S3_SIGNATURE_VERSION: ${AWS_S3_SIGNATURE_VERSION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME}
+      DEFAULT_FILE_STORAGE: ${DEFAULT_FILE_STORAGE}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: adtalk_mockup_db
+      DB_PORT: ${DB_PORT}
+      STATIC_URL: static/
+      STATIC_ROOT: /app/staticfiles
+      MEDIA_URL: /media/
+      MEDIA_ROOT: /app/media
+      SECRET_KEY: ${SECRET_KEY}
+      DEBUG: "False"
+    depends_on:
+      - adtalk_mockup_db
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    volumes:
+      - static_files:/app/staticfiles
+      - media_files:/app/media
+    working_dir: /app
+
+  adtalk_mockup_db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    container_name: adtalk-mockup-db
+    ports:
+      - "${DB_PORT}:5432"
+
+volumes:
+  postgres_data:
+  static_files:
+  media_files:
