@@ -21,9 +21,6 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy project files
 COPY . /app/
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
-
 # Create non-root user for security
 RUN useradd -m appuser && \
     chown -R appuser:appuser /app
