@@ -9,6 +9,6 @@ from .serializers import CustomUserSerializer
 # Create your views here.
 class UserViewset(GenericViewset):
     protected_views = ["create", "update", "partial_update", "retrieve", "destroy"]
-    permissions = [IsAuthenticated, IsAdminUser]
+    permissions = [IsAuthenticated]
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
