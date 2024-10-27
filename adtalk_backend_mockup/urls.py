@@ -27,4 +27,5 @@ urlpatterns = [
     path(f"{api_prefix}product/", include("product.urls")),
     path(f"{api_prefix}distribution/", include("distribution.urls")),
     path(f"{api_prefix}task/", include("task.urls")),
+    path(f"{api_prefix}asset/", include("asset.urls")),
 ]
