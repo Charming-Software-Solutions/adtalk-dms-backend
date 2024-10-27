@@ -42,7 +42,7 @@ class Asset(BaseModel):
     )
 
     thumbnail = models.ImageField(
-        upload_to="asset_images",
+        upload_to="asset_media",
         validators=[
             validate_image,
             FileExtensionValidator(["jpg", "jpeg", "png", "gif", "bmp", "webp"]),

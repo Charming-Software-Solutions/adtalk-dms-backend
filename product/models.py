@@ -34,7 +34,7 @@ class Product(BaseModel):
         ProductType, on_delete=models.CASCADE, blank=False, null=False
     )
     thumbnail = models.ImageField(
-        upload_to="product_images",
+        upload_to="product_media",
         validators=[
             validate_image,
             FileExtensionValidator(["jpg", "jpeg", "png", "gif", "bmp", "webp"]),
