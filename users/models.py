@@ -25,12 +25,14 @@ class CustomUserManager(BaseUserManager):
         user = self.create_user(email, password)
         user.is_staff = True
         user.is_superuser = True
+        user.role = "admin"
         user.save(using=self._db)
         return user
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (
+        ("admin", "Admin"),
         ("warehouse_worker", "Warehouse Worker"),
         ("logistics_specialist", "Logistics Specialist"),
         ("project_handler", "Project Handler"),
