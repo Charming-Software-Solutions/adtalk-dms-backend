@@ -2,7 +2,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from storages.backends.s3boto3 import S3Boto3Storage
 
-from shared.models import BaseModel, Classification
+from shared.models import BaseModel
 from shared.validators import validate_image
 
 
