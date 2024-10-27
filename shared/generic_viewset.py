@@ -15,8 +15,26 @@ class GenericViewset(
     protected_views = []
     permissions = [AllowAny]  # Default permission
 
+    def get_protected_views(self):
+        """
+        Process protected_views to handle 'all' keyword and return final list of protected views
+        """
+        all_actions = {
+            "create",
+            "retrieve",
+            "update",
+            "partial_update",
+            "destroy",
+            "list",
+        }
+
+        if "all" in self.protected_views:
+            return list(all_actions)
+        return self.protected_views
+
     def get_permissions(self):
-        if self.action in self.protected_views:
+        protected_views = self.get_protected_views()
+        if self.action in protected_views:
             return [permission() for permission in self.permissions]
         return [AllowAny()]
 
