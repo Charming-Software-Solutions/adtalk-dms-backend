@@ -29,16 +29,22 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = ["localhost", "pgss04c0cgo084g4swg0kccw.167.172.74.30.sslip.io"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "adtalk.org",
+    ".adtalk.org",
+]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",
-    "http://pgss04c0cgo084g4swg0kccw.167.172.74.30.sslip.io",
+    "https://adtalk.org",
+    "https://*.adtalk.org",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://pgss04c0cgo084g4swg0kccw.167.172.74.30.sslip.io",
+    "https://adtalk.org",
+    "https://*.adtalk.org",
 ]
 
 
