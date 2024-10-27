@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from product.views import (
     ProductBrandViewset,
+    ProductBulkCreateView,
     ProductCategoryViewset,
     ProductTypeViewset,
     ProductViewset,
@@ -18,4 +19,5 @@ router.register(r"", ProductViewset, basename="product")
 
 urlpatterns = [
     path("", include(router.urls)),
+    path("bulk-create", ProductBulkCreateView.as_view(), name="bulk-create"),
 ]

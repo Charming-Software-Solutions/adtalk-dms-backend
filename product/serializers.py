@@ -3,6 +3,12 @@ from rest_framework import serializers
 from .models import Product, ProductBrand, ProductCategory, ProductType
 
 
+class ProductBulkCreateSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        product_data = [Product(**item) for item in validated_data]
+        return Product.objects.bulk_create(product_data)
+
+
 class ProductBrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductBrand
@@ -23,6 +29,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     thumbnail = serializers.ImageField(required=False, write_only=False)
+    list_serializer_class = ProductBulkCreateSerializer
 
     class Meta:
         model = Product

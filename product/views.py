@@ -1,5 +1,6 @@
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from product.models import Product, ProductBrand, ProductCategory, ProductType
@@ -40,3 +41,12 @@ class ProductViewset(GenericViewset):
     protected_views = ["create", "update", "partial_update", "destroy"]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class ProductBulkCreateView(generics.ListCreateAPIView):
+    serializer_class = ProductSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get("data", {}), list):
+            kwargs["many"] = True
+        return super().get_serializer(*args, **kwargs)
