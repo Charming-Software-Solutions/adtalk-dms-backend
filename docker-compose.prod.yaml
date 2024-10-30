@@ -22,7 +22,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: adtalk_mockup_db
-      DB_PORT: ${DB_PORT}
+      DB_PORT: 5432
       STATIC_URL: static/
       STATIC_ROOT: /app/staticfiles
       MEDIA_URL: /media/
