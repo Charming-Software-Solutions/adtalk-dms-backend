@@ -15,7 +15,7 @@ from shared.generic_viewset import GenericViewset
 class DistributionViewset(GenericViewset):
     include_list_view = True
     protected_views = ["create", "update", "partial_update", "destroy"]
-    queryset = Distribution.objects.all()
+    queryset = Distribution.objects.all().order_by("-updated_at")
     serializer_class = DistributionSerializer
 
 

@@ -21,25 +21,25 @@ def product_pre_delete(sender, instance, **kwargs):
 
 class ProductBrandViewset(GenericViewset):
     protected_views = ["create", "update", "partial_update", "destroy"]
-    queryset = ProductBrand.objects.all()
+    queryset = ProductBrand.objects.all().order_by("-updated_at")
     serializer_class = ProductBrandSerializer
 
 
 class ProductCategoryViewset(GenericViewset):
     protected_views = ["create", "update", "partial_update", "destroy"]
-    queryset = ProductCategory.objects.all()
+    queryset = ProductCategory.objects.all().order_by("-updated_at")
     serializer_class = ProductCategorySerializer
 
 
 class ProductTypeViewset(GenericViewset):
     protected_views = ["create", "update", "partial_update", "destroy"]
-    queryset = ProductType.objects.all()
+    queryset = ProductType.objects.all().order_by("-updated_at")
     serializer_class = ProductTypeSerializer
 
 
 class ProductViewset(GenericViewset):
     protected_views = ["create", "update", "partial_update", "destroy"]
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by("-updated_at")
     serializer_class = ProductSerializer
 
 

@@ -8,5 +8,5 @@ from task.serializers import TaskSerializer
 class TaskViewset(GenericViewset):
     include_list_view = True
     protected_views = ["create", "update", "partial_update", "destroy"]
-    queryset = Task.objects.all()
+    queryset = Task.objects.all().order_by("-updated_at")
     serializer_class = TaskSerializer

@@ -15,5 +15,5 @@ class AssetTypeViewset(GenericViewset):
 class AssetViewset(GenericViewset):
     include_list_view = True
     protected_views = ["all"]
-    queryset = Asset.objects.all()
+    queryset = Asset.objects.all().order_by("-updated_at")
     serializer_class = AssetSerializer
