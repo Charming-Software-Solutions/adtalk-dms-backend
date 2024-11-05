@@ -8,15 +8,15 @@ from shared.models import BaseModel
 class Distribution(BaseModel):
     TYPE_CHOICES = (("EXPORT", "Export"), ("IMPORT", "Import"))
     STATUS_CHOICES = (
-        ("Pending", "Pending"),
-        ("In Transit", "In Transit"),
-        ("Delivered", "Delivered"),
-        ("Cancelled", "Cancelled"),
-        ("Returned", "Returned"),
-        ("On Hold", "On Hold"),
-        ("Completed", "Completed"),
-        ("Failed", "Failed"),
-        ("Scheduled", "Scheduled"),
+        ("PENDING", "Pending"),
+        ("IN_TRANSIT", "In Transit"),
+        ("DELIVERED", "Delivered"),
+        ("CANCELLED", "Cancelled"),
+        ("RETURNED", "Returned"),
+        ("ON_HOLD", "On Hold"),
+        ("COMPLETED", "Completed"),
+        ("FAILED", "Failed"),
+        ("SCHEDULED", "Scheduled"),
     )
 
     dist_id = models.CharField(max_length=255, null=True, blank=True)
@@ -25,7 +25,7 @@ class Distribution(BaseModel):
     )
     client = models.CharField(max_length=255, null=False, blank=False)
     employee = models.CharField(max_length=255, null=False, blank=False)
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="Pending")
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="PENDING")
 
     def save(self, *args, **kwargs):
         if not self.dist_id:
