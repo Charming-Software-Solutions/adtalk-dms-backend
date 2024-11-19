@@ -14,24 +14,32 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "role",
             "password",
             "last_login",
-        )  # Add last_login here
-        extra_kwargs = {"password": {"write_only": True}}
-        read_only_fields = ("last_login",)  # Ensure last_login is read-only
+        )
+        extra_kwargs = {
+            "password": {
+                "write_only": True,
+                "required": False,
+                "allow_blank": True,
+                "allow_null": True,
+            },
+        }
+        read_only_fields = ("last_login",)
 
     def create(self, validated_data):
-        # Ensure 'role' is provided in the validated data
+        email = validated_data.get("email")
+        if not email:
+            raise serializers.ValidationError({"email": "This field is required."})
+
         role = validated_data.get("role")
         if not role:
             raise serializers.ValidationError({"role": "This field is required."})
 
-        # Use the create_user method of CustomUserManager
         user = CustomUser.objects.create_user(
-            email=validated_data["email"],
-            password=validated_data["password"],
+            email=email,
+            password=validated_data.get("password"),
             role=role,
         )
 
-        # Set other fields
         user.is_active = validated_data.get("is_active", True)
         user.is_staff = validated_data.get("is_staff", False)
 
@@ -39,10 +47,9 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        # Handle password updates
-        if "password" in validated_data:
-            password = validated_data.pop("password")
-            instance.set_password(password)
+        # Prevent email from being updated
+        if "email" in validated_data:
+            validated_data.pop("email")
 
         # Update other fields
         for attr, value in validated_data.items():
