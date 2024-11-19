@@ -5,15 +5,15 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.db import models
-
-# Create your models here.
 
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError("Please specify an email address")
+            raise ValidationError({"email": "Please specify an email address."})
 
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
@@ -32,14 +32,14 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (
-        ("admin", "Admin"),
-        ("warehouse_worker", "Warehouse Worker"),
-        ("logistics_specialist", "Logistics Specialist"),
-        ("project_handler", "Project Handler"),
+        ("ADMIN", "Admin"),
+        ("WAREHOUSE_WORKER", "Warehouse Worker"),
+        ("LOGISTICS_SPECIALIST", "Logistics Specialist"),
+        ("PROJECT_HANDLER", "Project Handler"),
     )
 
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
-    email = models.EmailField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255, unique=True, validators=[validate_email])
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     role = models.CharField(

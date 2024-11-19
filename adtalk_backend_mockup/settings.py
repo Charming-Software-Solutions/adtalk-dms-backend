@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     # Apps
     "shared",
     "users",
+    "employee",
     "product",
     "distribution",
     "task",
@@ -146,6 +147,11 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "DEFAULT_PARSER_CLASSES": (
+        "rest_framework.parsers.FormParser",
+        "rest_framework.parsers.MultiPartParser",
+        "rest_framework.parsers.JSONParser",
+    ),
 }
 
 SIMPLE_JWT = {
@@ -200,3 +206,7 @@ AWS_S3_VERIFY = True
 AWS_QUERYSTRING_EXPIRE = config("AWS_QUERYSTRING_EXPIRE")
 DEFAULT_FILE_STORAGE = config("DEFAULT_FILE_STORAGE")
 AWS_S3_CUSTOM_DOMAIN = config("AWS_S3_CUSTOM_DOMAIN")
+
+# RESEND
+RESEND_API_KEY = config("RESEND_API_KEY")
+RESEND_HOST = config("RESEND_HOST")
