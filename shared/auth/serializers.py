@@ -8,12 +8,20 @@ class LoginSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user: AuthUser) -> Token:
         token = super(LoginSerializer, cls).get_token(user)
-        token["user"] = str(user.id)
+        token["role"] = user.role
+        token["id"] = str(user.id)
         return token
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        data.update({"user": str(self.user.id)})
+        data.update(
+            {
+                "user": {
+                    "id": str(self.user.id),
+                    "role": self.user.role,
+                }
+            }
+        )
 
         try:
             employee = Employee.objects.get(user=self.user)
