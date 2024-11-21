@@ -18,13 +18,13 @@ class IsLogisticsOrAdmin(permissions.BasePermission):
             return request.user.is_authenticated
         return request.user.is_authenticated and request.user.role in [
             "LOGISTICS_SPECIALIST",
-            "admin",
+            "ADMIN",
         ]
 
     def has_object_permission(self, request, view, obj):
         return view.action in ["retrieve", "list"] or request.user.role in [
             "LOGISTICS_SPECIALIST",
-            "admin",
+            "ADMIN",
         ]
 
 
@@ -34,13 +34,13 @@ class IsProjectHandlerOrAdmin(permissions.BasePermission):
             return request.user.is_authenticated
         return request.user.is_authenticated and request.user.role in [
             "PROJECT_HANDLER",
-            "admin",
+            "ADMIN",
         ]
 
     def has_object_permission(self, request, view, obj):
         return view.action in ["retrieve", "list"] or request.user.role in [
             "PROJECT_HANDLER",
-            "admin",
+            "ADMIN",
         ]
 
 
@@ -55,6 +55,6 @@ class IsLogisticsOrWarehouseWorker(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return view.action in ["retrieve", "list"] or request.user.role in [
-            "LOGISTICS_SPECIALIST",
-            "WAREHOUSE_WOKER",
+            "PROJECT_HANDLER",
+            "ADMIN",
         ]
