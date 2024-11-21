@@ -47,3 +47,9 @@ class Product(BaseModel):
     flavor = models.CharField(max_length=255, blank=True, null=True)
     expiration = models.DateTimeField(blank=True, null=True)
     area = models.CharField(max_length=150, blank=True, null=True)
+    ba_reference_number = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="Reference number for logistics",
+    )

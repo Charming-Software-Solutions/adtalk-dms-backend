@@ -57,3 +57,9 @@ class Asset(BaseModel):
         Product, on_delete=models.CASCADE, blank=True, null=True
     )
     area = models.CharField(max_length=150, blank=True, null=True)
+    ba_reference_number = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="Reference number for logistics",
+    )
