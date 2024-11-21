@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from distribution.models import Distribution, DistributionProduct
+from asset.models import Asset
+from asset.serializers import AssetSerializer
+from distribution.models import Distribution, DistributionAsset, DistributionProduct
 from product.models import Product
 from product.serializers import ProductSerializer
 
@@ -18,8 +20,22 @@ class DistributionProductSerializer(serializers.ModelSerializer):
         return representation
 
 
+class DistributionAssetSerializer(serializers.ModelSerializer):
+    asset = serializers.PrimaryKeyRelatedField(queryset=Asset.objects.all())
+
+    class Meta:
+        model = DistributionAsset
+        fields = ["asset", "quantity"]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["asset"] = AssetSerializer(instance.asset).data
+        return representation
+
+
 class DistributionSerializer(serializers.ModelSerializer):
     products = DistributionProductSerializer(many=True)
+    assets = DistributionAssetSerializer(many=True, required=False)
 
     class Meta:
         model = Distribution
@@ -38,6 +54,7 @@ class DistributionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         products_data = validated_data.pop("products", [])
+        assets_data = validated_data.pop("assets", [])
 
         distribution = Distribution.objects.create(**validated_data)
 
@@ -45,6 +62,9 @@ class DistributionSerializer(serializers.ModelSerializer):
             DistributionProduct.objects.create(
                 distribution=distribution, **product_data
             )
+
+        for asset_data in assets_data:
+            DistributionAsset.objects.create(distribution=distribution, **asset_data)
 
         distribution.save()
         return distribution
@@ -60,5 +80,8 @@ class DistributionSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation["products"] = DistributionProductSerializer(
             instance.products.all(), many=True
+        ).data
+        representation["assets"] = DistributionAssetSerializer(
+            instance.assets.all(), many=True
         ).data
         return representation
