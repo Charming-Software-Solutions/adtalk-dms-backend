@@ -1,6 +1,7 @@
 from django.db import models
 
 from distribution.models import Distribution
+from employee.models import Employee
 from shared.models import BaseModel
 
 
@@ -18,8 +19,16 @@ class Task(BaseModel):
         ("DELIVERED", "Delivered"),
     )
 
-    employee = models.CharField(max_length=255, null=False, blank=False)
+    warehouse_person = models.ForeignKey(
+        Employee,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+    )
     distribution = models.ForeignKey(
         Distribution, on_delete=models.CASCADE, related_name="tasks"
     )
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="PENDING")
+
+    class Meta:
+        unique_together = ("warehouse_person", "distribution")
