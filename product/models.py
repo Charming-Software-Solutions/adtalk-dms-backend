@@ -46,3 +46,4 @@ class Product(BaseModel):
     stock = models.PositiveIntegerField(default=0)
     flavor = models.CharField(max_length=255, blank=True, null=True)
     expiration = models.DateTimeField(blank=True, null=True)
+    area = models.CharField(max_length=150, blank=True, null=True)
