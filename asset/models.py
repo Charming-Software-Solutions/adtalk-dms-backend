@@ -2,6 +2,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from storages.backends.s3boto3 import S3Boto3Storage
 
+from product.models import Product
 from shared.models import BaseModel
 from shared.validators import validate_image
 
@@ -52,3 +53,13 @@ class Asset(BaseModel):
         null=True,
     )
     stock = models.PositiveIntegerField(default=0)
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, blank=True, null=True
+    )
+    area = models.CharField(max_length=150, blank=True, null=True)
+    ba_reference_number = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="Reference number for logistics",
+    )
