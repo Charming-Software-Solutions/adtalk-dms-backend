@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.crypto import get_random_string
 
+from asset.models import Asset
 from product.models import Product
 from shared.models import BaseModel
 
@@ -38,4 +39,12 @@ class DistributionProduct(BaseModel):
         Distribution, on_delete=models.CASCADE, related_name="products"
     )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+
+
+class DistributionAsset(BaseModel):
+    distribution = models.ForeignKey(
+        Distribution, on_delete=models.CASCADE, related_name="assets"
+    )
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
