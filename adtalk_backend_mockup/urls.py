@@ -29,4 +29,5 @@ urlpatterns = [
     path(f"{api_prefix}task/", include("task.urls")),
     path(f"{api_prefix}asset/", include("asset.urls")),
     path(f"{api_prefix}employee/", include("employee.urls")),
+    path(f"{api_prefix}metrics/", include("metrics.urls")),
 ]

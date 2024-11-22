@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     "distribution",
     "task",
     "asset",
+    "metrics",
 ]
 
 MIDDLEWARE = [
