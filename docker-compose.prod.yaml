@@ -25,9 +25,9 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: adtalk_mockup_db
       DB_PORT: 5432
-      STATIC_URL: static/
+      STATIC_URL: https://api.adtalk.org/static/
       STATIC_ROOT: /app/staticfiles
-      MEDIA_URL: /media/
+      MEDIA_URL: https://api.adtalk.org/media/
       MEDIA_ROOT: /app/media
       SECRET_KEY: ${SECRET_KEY}
       DEBUG: "False"
