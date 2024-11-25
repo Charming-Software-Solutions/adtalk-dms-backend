@@ -3,8 +3,8 @@ from django.urls import path
 from metrics.views import (
     MonthlyDistributionFlow,
     ProductsAboutToExpireCount,
+    RemainingTaskCount,
     TotalItemStock,
-    WeeklyRemainingTaskCount,
 )
 
 app_name = "metrics"
@@ -17,8 +17,8 @@ urlpatterns = [
         name="monthly-distribution-flow",
     ),
     path(
-        "weekly-remaining-task-count/",
-        WeeklyRemainingTaskCount.as_view(),
+        "remaining-task-count/",
+        RemainingTaskCount.as_view(),
         name="weekly-remaining-task-count/",
     ),
     path(

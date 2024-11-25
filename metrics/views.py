@@ -42,21 +42,13 @@ class MonthlyDistributionFlow(views.APIView):
         return Response({"value": total_distributions})
 
 
-class WeeklyRemainingTaskCount(views.APIView):
+class RemainingTaskCount(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        current_date = timezone.now()
-        start_of_week = current_date - timedelta(days=current_date.weekday())
-        end_of_week = start_of_week + timedelta(
-            days=6, hours=23, minutes=59, seconds=59
-        )
-
-        remaining_tasks = (
-            Task.objects.exclude(status__in=["DELIVERED", "SHELVED"])
-            .filter(created_at__range=(start_of_week, end_of_week))
-            .count()
-        )
+        remaining_tasks = Task.objects.exclude(
+            status__in=["DELIVERED", "SHELVED"]
+        ).count()
 
         return Response({"value": remaining_tasks})
 
