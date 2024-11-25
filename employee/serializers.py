@@ -77,3 +77,24 @@ class EmployeeSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class UpdateEmployeeProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = "__all__"
+        read_only_fields = ("id", "user")
+
+    def update(self, instance, validated_data):
+        request_user = self.context["request"].user
+        if instance.user != request_user:
+            raise serializers.ValidationError("You can only update your own profile")
+
+        if "profile_image" in validated_data:
+            instance.profile_image = validated_data["profile_image"]
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
