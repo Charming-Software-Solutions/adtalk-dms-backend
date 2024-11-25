@@ -60,7 +60,7 @@ services:
       - static_files:/app/staticfiles
       - media_files:/app/media
     ports:
-      - "8080:80"
+      - "8081:80"
     depends_on:
       - prod
 
