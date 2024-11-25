@@ -1,6 +1,6 @@
 name: adtalk-mockup-server-prod
 services:
-  dev:
+  prod:
     build:
       context: .
       dockerfile: Dockerfile
@@ -51,6 +51,18 @@ services:
     container_name: adtalk-mockup-db
     ports:
       - "${DB_PORT}:5432"
+
+  nginx:
+    image: nginx:latest
+    container_name: adtalk-mockup-nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - static_files:/app/staticfiles
+      - media_files:/app/media
+    ports:
+      - "80:80"
+    depends_on:
+      - prod
 
 volumes:
   postgres_data:
