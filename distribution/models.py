@@ -19,7 +19,6 @@ class Distribution(BaseModel):
         ("FAILED", "Failed"),
         ("SCHEDULED", "Scheduled"),
     )
-
     dist_id = models.CharField(max_length=255, null=True, blank=True)
     type = models.CharField(
         max_length=50, choices=TYPE_CHOICES, null=False, blank=False
@@ -31,7 +30,61 @@ class Distribution(BaseModel):
     def save(self, *args, **kwargs):
         if not self.dist_id:
             self.dist_id = get_random_string(length=6).upper()
+
+        # Track the original status
+        is_new = self.pk is None
+        original_status = None
+
+        # Only try to get original status if the object is not new
+        if not is_new:
+            try:
+                original_status = Distribution.objects.get(pk=self.pk).status
+            except Distribution.DoesNotExist:
+                # Fallback to None if the object can't be retrieved
+                original_status = None
+
         super().save(*args, **kwargs)
+
+        # Only process stock changes for existing objects with status change
+        if (
+            not is_new
+            and original_status is not None
+            and original_status != self.status
+        ):
+            self.process_stock_changes(original_status)
+
+    def process_stock_changes(self, original_status):
+        if self.status in ["DELIVERED", "COMPLETED"]:
+            for distribution_product in self.products.all():
+                product = distribution_product.product
+                quantity = distribution_product.quantity
+
+                if self.type == "EXPORT":
+                    product.stock -= quantity
+                elif self.type == "IMPORT":
+                    product.stock += quantity
+
+                product.save()
+
+        # Handle stock reversal for cancelled or returned exports
+        elif (
+            (self.status in ["CANCELLED", "RETURNED"])
+            and original_status in ["DELIVERED", "COMPLETED"]
+            and self.type == "EXPORT"
+        ):
+            for distribution_product in self.products.all():
+                product = distribution_product.product
+                quantity = distribution_product.quantity
+
+                product.stock += quantity
+                product.save()
+
+    def update_status(self, new_status):
+        """
+        Convenience method to update status with stock management
+        """
+        self.status = new_status
+        self.save()
 
 
 class DistributionProduct(BaseModel):
