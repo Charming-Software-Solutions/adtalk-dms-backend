@@ -1,6 +1,7 @@
 from django.urls import path
 
 from metrics.views import (
+    DistributionFlowComparisonView,
     MonthlyDistributionFlow,
     ProductsAboutToExpireCount,
     RemainingTaskCount,
@@ -25,5 +26,10 @@ urlpatterns = [
         "products-about-to-expire-count/",
         ProductsAboutToExpireCount.as_view(),
         name="products-about-to-expire-count",
+    ),
+    path(
+        "distribution-flow-comparison/",
+        DistributionFlowComparisonView.as_view(),
+        name="distribution-flow-comparison",
     ),
 ]
