@@ -22,11 +22,15 @@ def get_daily_metric(
     date: datetime,
     aggregate_field: Optional[str] = None,
     count: bool = False,
+    filter_status: Optional[str] = None,
 ) -> Decimal | int:
     filter_params = {
         status_field: status_value,
         f"{date_field}__date": date,
     }
+
+    if filter_status:
+        filter_params["status"] = filter_status
 
     if count:
         return (
@@ -118,6 +122,7 @@ class DistributionFlowComparisonView(views.APIView):
                 date_field="created_at",
                 date=date,
                 count=True,
+                filter_status="COMPLETED",
             )
             import_count = get_daily_metric(
                 model=Distribution,
@@ -126,6 +131,7 @@ class DistributionFlowComparisonView(views.APIView):
                 date_field="created_at",
                 date=date,
                 count=True,
+                filter_status="COMPLETED",
             )
 
             data.append(
