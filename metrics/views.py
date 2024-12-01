@@ -58,7 +58,7 @@ class TotalItemStock(views.APIView):
             total_product_stock=Sum("stock")
         ).get("total_product_stock", 0)
 
-        total_item_stock = total_asset_stock + total_product_stock
+        total_item_stock = total_product_stock
         return Response({"value": total_item_stock})
 
 
