@@ -28,7 +28,7 @@ class Asset(BaseModel):
         ("DAMAGED", "Damaged"),
     ]
 
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     code = models.CharField(
         max_length=50, unique=True, help_text="Unique identifier for the item"
     )
