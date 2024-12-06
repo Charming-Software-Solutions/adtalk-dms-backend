@@ -12,7 +12,7 @@ class DistributionProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DistributionProduct
-        fields = ["product", "quantity"]
+        fields = ["product", "quantity", "expiration"]
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
