@@ -17,6 +17,10 @@ class DistributionProductSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation["product"] = ProductSerializer(instance.product).data
+        if instance.distribution:
+            representation["ba_reference_number"] = (
+                instance.distribution.ba_reference_number
+            )
         return representation
 
 
