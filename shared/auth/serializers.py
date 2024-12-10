@@ -32,7 +32,7 @@ class LoginSerializer(TokenObtainPairSerializer):
             employee = Employee.objects.get(user=self.user)
             data["employee"] = {
                 "id": str(employee.id),
-                "name": employee.name,
+                "name": f"{employee.first_name} {employee.last_name}",
                 "profile_image": (
                     employee.profile_image.url if employee.profile_image else None
                 ),
