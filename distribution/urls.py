@@ -1,11 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import (
-    DistributionCheckProductsView,
-    DistributionProductListView,
-    DistributionViewset,
-)
+from .views import DistributionCheckProductsView, DistributionViewset
 
 app_name = "distribution"
 
@@ -17,11 +13,6 @@ urlpatterns = [
         "check-products/",
         DistributionCheckProductsView.as_view(),
         name="check-products",
-    ),
-    path(
-        "get-distribution-products/",
-        DistributionProductListView.as_view(),
-        name="get-distribution-products",
     ),
     path("", include(router.urls)),
 ]

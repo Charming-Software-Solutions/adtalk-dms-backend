@@ -9,8 +9,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db import models
 
-from employee.models import Employee
-
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -27,10 +25,8 @@ class CustomUserManager(BaseUserManager):
         user = self.create_user(email, password)
         user.is_staff = True
         user.is_superuser = True
-        user.role = "ADMIN"
+        user.role = "admin"
         user.save(using=self._db)
-
-        Employee.objects.create(user=user, first_name="Admin", last_name="Account")
         return user
 
 

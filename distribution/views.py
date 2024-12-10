@@ -1,16 +1,13 @@
 from typing import Any, Dict, List
 from uuid import UUID
 
-from rest_framework import generics, permissions
+from rest_framework import permissions
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import generics
 
-from distribution.models import Distribution, DistributionProduct
-from distribution.serializers import (
-    DistributionProductSerializer,
-    DistributionSerializer,
-)
+from distribution.models import Distribution
+from distribution.serializers import DistributionSerializer
 from product.models import Product
 from shared.generic_viewset import GenericViewset
 from shared.permissions import IsLogisticsOrAdmin
@@ -28,12 +25,6 @@ class DistributionViewset(GenericViewset):
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
-
-
-class DistributionProductListView(generics.ListAPIView):
-    queryset = DistributionProduct.objects.all()
-    serializer_class = DistributionProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class DistributionCheckProductsView(generics.GenericAPIView):

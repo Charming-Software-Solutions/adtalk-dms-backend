@@ -8,8 +8,7 @@ from shared.validators import validate_image
 
 
 class Employee(BaseModel):
-    first_name = models.CharField(max_length=100, blank=False, null=False, unique=False)
-    last_name = models.CharField(max_length=100, blank=False, null=False, unique=False)
+    name = models.CharField(max_length=100, blank=False, null=False, unique=False)
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
