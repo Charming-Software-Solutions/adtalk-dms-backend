@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.crypto import get_random_string
 
 from asset.models import Asset
 from product.models import Product
@@ -18,13 +19,7 @@ class Distribution(BaseModel):
         ("FAILED", "Failed"),
         ("SCHEDULED", "Scheduled"),
     )
-    ba_reference_number = models.CharField(
-        max_length=100,
-        blank=False,
-        null=False,
-        unique=True,
-        help_text="Reference number for allocations.",
-    )
+    dist_id = models.CharField(max_length=255, null=True, blank=True)
     type = models.CharField(
         max_length=50, choices=TYPE_CHOICES, null=False, blank=False
     )
@@ -33,6 +28,9 @@ class Distribution(BaseModel):
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="PENDING")
 
     def save(self, *args, **kwargs):
+        if not self.dist_id:
+            self.dist_id = get_random_string(length=6).upper()
+
         # Track the original status
         is_new = self.pk is None
         original_status = None
@@ -95,7 +93,6 @@ class DistributionProduct(BaseModel):
     )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    expiration = models.DateTimeField(blank=False, null=False)
 
 
 class DistributionAsset(BaseModel):
