@@ -4,6 +4,7 @@ from metrics.views import (
     DistributionFlowComparisonView,
     MonthlyDistributionFlow,
     ProductsAboutToExpireCount,
+    ProductsExpiredCount,
     RemainingTaskCount,
     TotalItemStock,
 )
@@ -31,5 +32,10 @@ urlpatterns = [
         "distribution-flow-comparison/",
         DistributionFlowComparisonView.as_view(),
         name="distribution-flow-comparison",
+    ),
+    path(
+        "products-expired-count/",
+        ProductsExpiredCount.as_view(),
+        name="products-expired-count",
     ),
 ]

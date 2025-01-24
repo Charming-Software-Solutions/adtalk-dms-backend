@@ -9,7 +9,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from asset.models import Asset
-from distribution.models import Distribution
+from distribution.models import Distribution, DistributionProduct
 from product.models import Product
 from task.models import Task
 
@@ -95,7 +95,7 @@ class ProductsAboutToExpireCount(views.APIView):
         current_date = timezone.now()
         one_month_from_now = current_date + timedelta(days=30)
 
-        products_about_to_expire = Product.objects.filter(
+        products_about_to_expire = DistributionProduct.objects.filter(
             expiration__gte=current_date,
             expiration__lte=one_month_from_now,
         ).count()
@@ -145,3 +145,16 @@ class DistributionFlowComparisonView(views.APIView):
             date += timedelta(days=1)
 
         return Response(data)
+
+
+class ProductsExpiredCount(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        current_date = timezone.now()
+
+        expired_products = DistributionProduct.objects.filter(
+            expiration__lt=current_date
+        ).count()
+
+        return Response({"value": expired_products})
